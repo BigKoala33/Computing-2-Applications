@@ -76,12 +76,24 @@ Deck.decks_equal = (deck_1, deck_2) => (
  * Return a mathematically 'perfect' shuffle of a deck.
  * Cut the deck in two and interleave the cards from the two piles
  * into a new deck, with the top card staying on top.
+ * 1 2 3 4 5 6 7 8
+ * 0 1 2 3 4 5 6 7
  * https://en.wikipedia.org/wiki/Faro_shuffle
  */
 Deck.faro_out_shuffle = function (deck) {
-    return deck; // Placeholder implementation.
+    let half_1 = Deck.obtain_first_half(deck);
+    let half_2 = Deck.obtain_second_half(deck);
+    let i = 0;
+    let new_deck = [];
+    while (half_2[i] !== undefined) {
+        new_deck = new_deck.concat(half_1[i], half_2[i]);
+        i += 1;
+    }
+    return new_deck; // Placeholder implementation.
 };
 
+Deck.obtain_first_half = (deck) => (deck.slice(0, deck.length / 2));
+Deck.obtain_second_half = (deck) => (deck.slice(deck.length / 2));
 /**
  * Return a mathematically 'perfect' shuffle of a deck.
  * Cut the deck in two and interleave the cards from the two piles
@@ -89,7 +101,15 @@ Deck.faro_out_shuffle = function (deck) {
  * https://en.wikipedia.org/wiki/Faro_shuffle
  */
 Deck.faro_in_shuffle = function (deck) {
-    return deck; // Placeholder implementation.
+    let half_1 = Deck.obtain_first_half(deck);
+    let half_2 = Deck.obtain_second_half(deck);
+    let i = 0;
+    let new_deck = [];
+    while (half_1[i] !== undefined) {
+        new_deck = new_deck.concat(half_2[i], half_1[i]);
+        i += 1;
+    }
+    return new_deck; // Placeholder implementation.
 };
-
+debugger;
 export default Object.freeze(Deck);

@@ -15,7 +15,6 @@ const arbitrary_shuffled_deck = fc.tuple(
 });
 
 describe("Faro Out-shuffle", function () {
-
     property(
         "Given a deck; " +
         "When a Faro out-shuffle is performed; " +
@@ -70,5 +69,67 @@ describe("Faro Out-shuffle", function () {
             return false;
         }
     );
+    property(
+        "The new index of odd elements of the shuffled array"+
+        "is twice the index they had on the original array",
+        [arbitrary_shuffled_deck],
+        function (deck) {
+            let shuffled_deck = Deck.faro_out_shuffle(deck);
+            let array_of_odd = Deck.obtain_first_half(deck);
+            let i = 0;
+            let indexes_or = [];
+            while(array_of_odd[i] !== undefined){
+                indexes_or = indexes_or.concat(deck.indexOf(array_of_odd[i]));
+                i += 1;
+            }
+            i = 0;
+            let indexes_shuf = [];
+            while(array_of_odd[i] !== undefined){
+                indexes_shuf = indexes_shuf.concat(shuffled_deck.indexOf(array_of_odd[i]));
+                i += 1;
+            }
+            let array_2 = indexes_or.map((el) => el*2);
+            return array_2.join() === indexes_shuf.join();
+        }
+    );
 
 });
+
+describe("Faro In-Shuffle", function (){
+
+    property(
+        "The indexes of the second half of the unshuffled deck"+
+        " are -(half.length-(index of even)) index on the shuffled deck",
+        [arbitrary_shuffled_deck],
+        function (deck){
+            let iterator = deck.length/2;
+            const s_half = Deck.obtain_second_half(deck);
+            const shuffled_deck = Deck.faro_in_shuffle(deck);
+            let indexes_or = [];
+            let i = 0;
+            while(s_half[i] !== undefined){
+                indexes_or = indexes_or.concat(deck.indexOf(s_half[i]));
+                i += 1;
+            }
+            i = 0;
+            let indexes_shuf = [];
+            while(s_half[i] !== undefined){
+                indexes_shuf = indexes_shuf.concat(shuffled_deck.indexOf(s_half[i]));
+                i += 1;
+            }
+            let final_arr = [];
+            i = 0;
+            while(indexes_or[i] !== undefined){
+                final_arr = final_arr.concat(indexes_or[i] - iterator);
+                iterator -=1;
+                i += 1;
+            }
+            return final_arr.join() === indexes_shuf.join();
+        }
+
+    );
+
+}
+
+
+);
